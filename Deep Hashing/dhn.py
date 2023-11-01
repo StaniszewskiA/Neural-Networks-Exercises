@@ -11,9 +11,10 @@ torch.multiprocessing.set_sharing_strategy('file_system')
 
 def get_config():
     if torch.cuda.is_available():
-        device = torch.device("cuda:1")
+        device = torch.device("cuda:0")
     else:
         device = torch.device("cpu")
+    print(device)
 
     config = {
         "alpha": 0.1,

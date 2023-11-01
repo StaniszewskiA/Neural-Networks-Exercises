@@ -22,9 +22,10 @@ torch.multiprocessing.set_sharing_strategy('file_system')
 
 def get_config():
     if torch.cuda.is_available():
-        device = torch.device("cuda:1")
+        device = torch.device("cuda:0")
     else:
         device = torch.device("cpu")
+    print(device)
 
     config = {
         "T": 10,
@@ -100,7 +101,7 @@ class CNNHLoss(torch.nn.Module):
 
 
 def train_val(config, bit):
-    device = config["device"]
+    device = torch.device("cuda:0")
     train_loader, test_loader, dataset_loader, num_train, num_test, num_dataset = get_data(config)
     config["num_train"] = num_train
     net = config["net"](bit).to(device)
@@ -152,6 +153,8 @@ def train_val(config, bit):
 
 
 if __name__ == "__main__":
+    os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+    os.environ['TORCH_USE_CUDA_DSA'] = '1'
     config = get_config()
     print(config)
     for bit in config["bit_list"]:
